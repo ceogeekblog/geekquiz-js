@@ -1,40 +1,42 @@
 window.addEventListener('load', function() {
-    // 1. Nascondiamo subito la riga di debug arancione
-    const debugMsg = document.querySelector('.debug-msg');
-    if (debugMsg) debugMsg.style.display = 'none';
-
-    // 2. Logica del quiz
+    // 1. Pulizia scritte di test precedenti
     const container = document.getElementById('cg-auto-quiz');
     if (!container) return;
-
-    // Prendiamo il testo dalla pagina
-    const text = document.querySelector('.post-content').innerText;
-    const words = text.split(/\s+/);
     
-    // Creiamo una domanda semplice per testare
-    const question = "...L'architettura del sistema operativo si basa su un __________ molto potente...";
-    const options = ["KERNEL", "MOUSE", "TASTIERA", "MONITOR"];
-    const answer = "KERNEL";
+    // Rimuove eventuali messaggi di debug o scritte fisse
+    container.innerHTML = ""; 
 
-    container.innerHTML = `
-        <div style="border:2px solid #00ff41; padding:20px; background:#000; color:#00ff41; font-family:monospace;">
-            <h3>[MODULO_QUIZ_ATTIVO]</h3>
-            <p>${question}</p>
-            <div id="opts"></div>
-        </div>`;
+    // 2. Creazione interfaccia Quiz
+    const quizBox = document.createElement('div');
+    quizBox.style = "border:2px solid #00ff41; padding:20px; background:#000; color:#00ff41; font-family:monospace; margin-top:20px;";
+    
+    quizBox.innerHTML = `
+        <h3 style="margin-top:0; border-bottom:1px solid #00ff41; padding-bottom:10px;">[MODULO_QUIZ_ATTIVO]</h3>
+        <p id="q-text">Domanda: Qual è il cuore del sistema operativo menzionato nel testo?</p>
+        <div id="quiz-options"></div>
+    `;
+    container.appendChild(quizBox);
 
-    options.forEach(o => {
+    // 3. Opzioni di risposta
+    const opzioni = ["KERNEL", "SOFTWARE", "HARDWARE", "DATABASE"];
+    const rispostaCorretta = "KERNEL";
+
+    opzioni.forEach(opt => {
         const btn = document.createElement('button');
-        btn.innerText = o;
-        btn.style = "display:block; margin:10px 0; padding:10px; background:none; border:1px solid #00ff41; color:#00ff41; cursor:pointer; width:100%; text-align:left;";
-        btn.onclick = function() {
-            if (o === answer) {
-                alert("ACCESSO GARANTITO: Risposta Corretta!");
-                location.reload();
+        btn.innerText = opt;
+        btn.style = "display:block; width:100%; margin:10px 0; padding:10px; background:none; border:1px solid #00ff41; color:#00ff41; cursor:pointer; text-align:left; font-family:monospace;";
+        
+        btn.onmouseover = () => btn.style.background = "rgba(0, 255, 65, 0.1)";
+        btn.onmouseout = () => btn.style.background = "none";
+        
+        btn.onclick = () => {
+            if (opt === rispostaCorretta) {
+                alert("ACCESSO AUTORIZZATO! Risposta esatta.");
+                quizBox.innerHTML = "<h2 style='text-align:center;'>COMPLIMENTI ARCHITETTO!</h2><p style='text-align:center;'>Sistema violato con successo.</p>";
             } else {
-                alert("ACCESSO NEGATO: Riprova.");
+                alert("ERRORE: Accesso negato.");
             }
         };
-        document.getElementById('opts').appendChild(btn);
+        document.getElementById('quiz-options').appendChild(btn);
     });
 });
