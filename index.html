@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <title>Demo GeekQuiz</title>
-    <style>body { background:#111; color:white; font-family:sans-serif; padding:20px; }</style>
+    <meta charset="UTF-8">
+    <title>GeekQuiz Demo</title>
+    <style>
+        body { background: #0a0a0a; color: #00ff41; font-family: monospace; padding: 50px; }
+        .debug-msg { color: orange; font-size: 12px; margin-bottom: 20px; border: 1px dashed orange; padding: 10px; }
+    </style>
 </head>
 <body>
-    <h1>Benvenuto nella Demo del Quiz</h1>
-    <p>L'architettura del sistema operativo si basa su un kernel molto potente. Il protocollo garantisce la sicurezza dei dati digitali.</p>
+    <div class="debug-msg">DEBUG: Se vedi solo questa riga, il file geekquiz.js non è caricato.</div>
     
+    <h1>SISTEMA_OPERATIVO_CEOGEEK</h1>
+    <div class="post-content">
+        <p>L'architettura del sistema operativo si basa su un kernel molto potente. Il protocollo garantisce la sicurezza dei dati digitali. L'algoritmo di sistema permette una crittografia avanzata e sicura.</p>
+    </div>
+
     <div id="cg-auto-quiz"></div>
 
-    <script src="geekquiz.js"></script>
+    <script src="./geekquiz.js"></script>
 </body>
 </html>
