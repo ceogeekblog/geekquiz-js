@@ -1,42 +1,64 @@
 window.addEventListener('load', function() {
-    // 1. Pulizia scritte di test precedenti
     const container = document.getElementById('cg-auto-quiz');
     if (!container) return;
-    
-    // Rimuove eventuali messaggi di debug o scritte fisse
-    container.innerHTML = ""; 
 
-    // 2. Creazione interfaccia Quiz
-    const quizBox = document.createElement('div');
-    quizBox.style = "border:2px solid #00ff41; padding:20px; background:#000; color:#00ff41; font-family:monospace; margin-top:20px;";
-    
-    quizBox.innerHTML = `
-        <h3 style="margin-top:0; border-bottom:1px solid #00ff41; padding-bottom:10px;">[MODULO_QUIZ_ATTIVO]</h3>
-        <p id="q-text">Domanda: Qual è il cuore del sistema operativo menzionato nel testo?</p>
-        <div id="quiz-options"></div>
+    // Configurazione Estetica
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes scanline { 0% { bottom: 100%; } 100% { bottom: 0%; } }
+        .cg-terminal { 
+            position: relative; overflow: hidden;
+            border: 2px solid #00ff41; background: #050505; 
+            color: #00ff41; padding: 25px; font-family: 'Courier New', monospace;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+        }
+        .cg-terminal::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: rgba(0, 255, 65, 0.1); animation: scanline 4s linear infinite;
+        }
+        .cg-btn { 
+            display: block; width: 100%; margin: 12px 0; padding: 12px; 
+            background: transparent; border: 1px solid #00ff41; color: #00ff41; 
+            text-align: left; cursor: pointer; transition: all 0.3s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .cg-btn:hover { background: #00ff41; color: #000; font-weight: bold; }
+        .cg-header { border-bottom: 1px solid #00ff41; margin-bottom: 15px; padding-bottom: 5px; font-size: 14px; }
     `;
-    container.appendChild(quizBox);
+    document.head.appendChild(style);
 
-    // 3. Opzioni di risposta
-    const opzioni = ["KERNEL", "SOFTWARE", "HARDWARE", "DATABASE"];
-    const rispostaCorretta = "KERNEL";
+    // Dati del Quiz (Personalizzabili qui)
+    const quizData = {
+        title: "AUTH_REQUIRED: TEST DI ACCESSO",
+        question: "Analisi testo: Quale componente gestisce le risorse hardware e garantisce la sicurezza dei processi?",
+        options: ["KERNEL MONOLITICO", "INTERFACCIA GUI", "MEMORIA RAM", "DRIVER STAMPANTE"],
+        correct: 0, // La prima opzione è quella giusta
+        successMsg: "ACCESSO AUTORIZZATO. RANGO: SISTEMISTA LIVELLO 1",
+        errorMsg: "ACCESSO NEGATO. SISTEMA BLOCCATO."
+    };
 
-    opzioni.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.innerText = opt;
-        btn.style = "display:block; width:100%; margin:10px 0; padding:10px; background:none; border:1px solid #00ff41; color:#00ff41; cursor:pointer; text-align:left; font-family:monospace;";
-        
-        btn.onmouseover = () => btn.style.background = "rgba(0, 255, 65, 0.1)";
-        btn.onmouseout = () => btn.style.background = "none";
-        
-        btn.onclick = () => {
-            if (opt === rispostaCorretta) {
-                alert("ACCESSO AUTORIZZATO! Risposta esatta.");
-                quizBox.innerHTML = "<h2 style='text-align:center;'>COMPLIMENTI ARCHITETTO!</h2><p style='text-align:center;'>Sistema violato con successo.</p>";
-            } else {
-                alert("ERRORE: Accesso negato.");
-            }
-        };
-        document.getElementById('quiz-options').appendChild(btn);
-    });
+    function startQuiz() {
+        container.innerHTML = `
+            <div class="cg-terminal">
+                <div class="cg-header">> ${quizData.title}</div>
+                <p>> ${quizData.question}</p>
+                <div id="quiz-options"></div>
+            </div>`;
+
+        quizData.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'cg-btn';
+            btn.innerText = `[${index}] ${opt}`;
+            btn.onclick = () => {
+                if (index === quizData.correct) {
+                    container.innerHTML = `<div class="cg-terminal"><h2 style="text-align:center">${quizData.successMsg}</h2><button class="cg-btn" onclick="location.reload()">RE-START</button></div>`;
+                } else {
+                    alert(quizData.errorMsg);
+                }
+            };
+            document.getElementById('quiz-options').appendChild(btn);
+        });
+    }
+
+    startQuiz();
 });
